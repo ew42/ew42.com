@@ -1,15 +1,29 @@
 const { createServer } = require('node:http');
-
-const hostname = '127.0.0.1';
-const port = 3000;
+const hostname = '0.0.0.0'; // Listen on all available network interfaces
+const port = 80; // Standard HTTP port
 
 const server = createServer((req, res) => {
-  res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+  
+  switch(req.url) {
+    case '/':
+      res.statusCode = 200;
+      res.end('Welcome to ew42.com');
+      break;
+    case '/about':
+      res.statusCode = 200;
+      res.end('About ew42.com');
+      break;
+    case '/contact':
+      res.statusCode = 200;
+      res.end('Contact Information for ew42.com');
+      break;
+    default:
+      res.statusCode = 404;
+      res.end('404 Not Found');
+  }
 });
 
 server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+  console.log(`Server running at http://ew42.com/`);
 });
-
