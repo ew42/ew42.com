@@ -75,7 +75,7 @@ const requestHandler = (req, res) => {
     switch(req.url) {
       case '/':
         res.statusCode = 200;
-        res.end('Welcome to ew42.com (Secure?)');
+        res.end('Welcome to ew42.com (Secureish.)');
         break;
       // ... other routes ...
       default:
