@@ -31,18 +31,27 @@ function verifySignature(payload, signature) {
 }
 
 function pullAndRestart() {
-  exec('git pull origin main && tmux send-keys -t nodejs-server "C-c" && tmux send-keys -t nodejs-server "node server.js" Enter', (error, stdout, stderr) => {
-    if (error) {
-      log(`Error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      log(`stderr: ${stderr}`);
-      return;
-    }
-    log(`stdout: ${stdout}`);
+  try {
+    // Pull the latest changes
+    log('Pulling latest changes...');
+    const pullOutput = execSync('git pull origin main').toString();
+    log(`Git pull output: ${pullOutput}`);
+
+    // Stop the current server
+    log('Stopping current server...');
+    execSync('tmux send-keys -t your_session_name C-c');
+    
+    // Wait for the server to stop
+    execSync('sleep 2');
+
+    // Start the server in a new tmux window
+    log('Starting server in a new tmux window...');
+    execSync('tmux new-window -t your_session_name -n server "node server.js"');
+
     log('Server updated and restarted successfully');
-  });
+  } catch (error) {
+    log(`Error during update and restart: ${error.message}`);
+  }
 }
 
 const requestHandler = (req, res) => {
