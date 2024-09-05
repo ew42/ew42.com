@@ -31,7 +31,7 @@ function verifySignature(payload, signature) {
 }
 
 function pullAndRestart() {
-  exec('git pull origin main && tmux send-keys -t your_session_name "C-c" && tmux send-keys -t your_session_name "node server.js" Enter', (error, stdout, stderr) => {
+  exec('git pull origin main && tmux send-keys -t nodejs-server "C-c" && tmux send-keys -t nodejs-server "node server.js" Enter', (error, stdout, stderr) => {
     if (error) {
       log(`Error: ${error.message}`);
       return;
