@@ -89,7 +89,7 @@ const requestHandler = (req, res) => {
       // ... other routes ...
       default:
         res.statusCode = 404;
-        res.end('404 Not Found');
+        res.end('404 Not Found ');
     }
   }
 };
