@@ -1,9 +1,10 @@
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
-const path = require('path');
 const crypto = require('crypto');
 const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 const certPath = '/etc/letsencrypt/live/ew42.com/fullchain.pem';
 const keyPath = '/etc/letsencrypt/live/ew42.com/privkey.pem';
@@ -16,7 +17,6 @@ const options = {
 const httpsPort = 443;
 const httpPort = 80;
 
-// Replace this with your generated secret
 const webhookSecret = 'ec6029c907a5f13527a8d44fd1cfab3dea100b90';
 
 function log(message) {
@@ -30,23 +30,23 @@ function verifySignature(payload, signature) {
   return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest));
 }
 
-function pullAndRestart() {
+async function pullAndRestart() {
   try {
-    // Pull the latest changes
-    log('Pulling latest changes...');
-    const pullOutput = execSync('git pull origin main').toString();
-    log(`Git pull output: ${pullOutput}`);
-
     // Stop the current server
     log('Stopping current server...');
-    execSync('tmux send-keys -t your_session_name C-c');
+    await execPromise('tmux send-keys -t nodejs-server:server.0 C-c');
     
     // Wait for the server to stop
-    execSync('sleep 2');
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // Start the server in a new tmux window
-    log('Starting server in a new tmux window...');
-    execSync('tmux new-window -t your_session_name -n server "node server.js"');
+    // Pull the latest changes
+    log('Pulling latest changes...');
+    const { stdout: pullOutput } = await execPromise('git pull origin main');
+    log(`Git pull output: ${pullOutput}`);
+
+    // Start the server in the same tmux window
+    log('Starting server...');
+    await execPromise('tmux send-keys -t nodejs-server:server.0 "node server.js" Enter');
 
     log('Server updated and restarted successfully');
   } catch (error) {
@@ -70,7 +70,7 @@ const requestHandler = (req, res) => {
       const event = req.headers['x-github-event'];
       if (event === 'push') {
         log('Received a valid webhook push event');
-        pullAndRestart();
+        pullAndRestart().catch(error => log(`Error in pullAndRestart: ${error.message}`));
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end('Webhook received successfully');
       } else {
@@ -84,7 +84,7 @@ const requestHandler = (req, res) => {
     switch(req.url) {
       case '/':
         res.statusCode = 200;
-        res.end('Welcome to ew42.com (Secureish.)');
+        res.end('Welcome to ew42.com (Secure!)');
         break;
       // ... other routes ...
       default:
