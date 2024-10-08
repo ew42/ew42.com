@@ -2,6 +2,7 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const express = require('express');
 
 // Update these paths to point to your certificate files
 const certPath = '/etc/letsencrypt/live/ew42.com/fullchain.pem';
