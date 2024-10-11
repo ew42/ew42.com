@@ -1,4 +1,5 @@
 import React, { useEffect, useState} from 'react'
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 function App() {
   const [backendData, setBackendData] = useState([{}])
@@ -10,17 +11,25 @@ function App() {
       data => {
         setBackendData(data)
       }
-  }
+  );
+}, []);
 
   return (
+  <Router>
     <div>
-      {(typeof backendData.users === 'undefined') ? (
-      <p>Loading... </p>
-      ) : (
-        backendData.users.map((user,i) => (
-          <p key={i}>{user}</p>)
-          ))
+      <Routes>
+        <Route exact path='/'>
+          {(typeof backendData.users === 'undefined') ? (
+          <p>Loading... </p>
+          ) : (
+          backendData.users.map((user,i) => (
+            <p key={i}>{user}</p>)
+            ))
+          }
+        </Route>
+      </Routes>
     </div>
+  </Router>
   );
 }
 

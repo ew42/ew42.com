@@ -27,12 +27,18 @@ function log(message) {
   logStream.write(logMessage);
 }
 
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build');
+
 app.get('/api', (req, res) => {
   const clientIp = req.socket.remoteAddress;
   const userAgent = req.headers['user-agnet'];
   log('Https request from ${clientIp} - ${userAgent} for ${req.url}');
   res.json({"users": ["userOne", "userTwo", "userThree"] });
 })
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
+});
 
 // const requestHandler = (req, res) => {
 //   const clientIp = req.socket.remoteAddress;
