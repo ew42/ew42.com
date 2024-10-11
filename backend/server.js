@@ -27,7 +27,7 @@ function log(message) {
   logStream.write(logMessage);
 }
 
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'build');
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
 app.get('/api', (req, res) => {
   const clientIp = req.socket.remoteAddress;
