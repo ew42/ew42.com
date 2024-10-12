@@ -1,0 +1,32 @@
+body {
+	background-color: #300924;
+}
+
+h1 {
+	color: #FFFFFF;
+	text-align: center;
+}
+
+.ubuntu-mono-regular {
+  font-family: "Ubuntu Mono", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.ubuntu-mono-bold {
+  font-family: "Ubuntu Mono", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.ubuntu-mono-regular-italic {
+  font-family: "Ubuntu Mono", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.ubuntu-mono-bold-italic {
+  font-family: "Ubuntu Mono", serif;
+  font-weight: 700;
+  font-style: italic;
+}
